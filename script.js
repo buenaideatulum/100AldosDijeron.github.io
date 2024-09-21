@@ -19,8 +19,8 @@ function startGame() {
         } else {
             clearInterval(interval);
             document.getElementById('startButton').textContent = '¡Empezar!';
-            document.getElementById('bellSound').play();
-            firstPressed = null; // Reset first pressed
+            playBellSound();  // Reproducir el sonido de campana
+            firstPressed = null; // Resetear primer botón presionado
             isGameActive = false;
             document.getElementById('startButton').disabled = false;
         }
@@ -32,10 +32,10 @@ function buttonPressed(color) {
     firstPressed = color;
 
     if (color === 'red') {
-        document.getElementById('soundRed').play();
+        playSound('red'); // Reproducir sonido rojo
         incrementScore('red');
     } else {
-        document.getElementById('soundBlue').play();
+        playSound('blue'); // Reproducir sonido azul
         incrementScore('blue');
     }
 }
@@ -43,4 +43,26 @@ function buttonPressed(color) {
 function incrementScore(color) {
     const scoreElement = document.getElementById(`score${color.charAt(0).toUpperCase() + color.slice(1)}`);
     scoreElement.textContent = parseInt(scoreElement.textContent) + 1;
+}
+
+function playSound(color) {
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const oscillator = audioContext.createOscillator();
+    
+    oscillator.type = 'sine'; // Tipo de onda
+    oscillator.frequency = color === 'red' ? 200 : 1000; // Frecuencia para el sonido
+    oscillator.connect(audioContext.destination);
+    oscillator.start();
+    oscillator.stop(audioContext.currentTime + 0.5); // Duración de 0.5 segundos
+}
+
+function playBellSound() {
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const oscillator = audioContext.createOscillator();
+    
+    oscillator.type = 'sine'; // Tipo de onda
+    oscillator.frequency = 440; // Frecuencia de la campana
+    oscillator.connect(audioContext.destination);
+    oscillator.start();
+    oscillator.stop(audioContext.currentTime + 0.5); // Duración de 0.5 segundos
 }
