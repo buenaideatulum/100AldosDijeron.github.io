@@ -3,24 +3,685 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Juego de Servicio al Cliente</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Formulario Briefing Aldo's</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        body {
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .btn {
+            padding: 10px 16px;
+            background-color: #4a7bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            flex-grow: 1;
+        }
+        .btn:hover {
+            background-color: #3a68e0;
+        }
+        .btn.export {
+            background-color: #9c27b0;
+        }
+        .btn.reset {
+            background-color: #f44336;
+        }
+        .btn.save {
+            background-color: #4CAF50;
+        }
+        .btn.load {
+            background-color: #FF9800;
+        }
+        .form-container {
+            position: relative;
+            margin: 0 auto;
+            width: 100%;
+            box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+        }
+        .briefing-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .briefing-table td, .briefing-table th {
+            border: 1px solid #ddd;
+            padding: 8px;
+            position: relative;
+        }
+        .briefing-header {
+            background-color: #fff;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #ddd;
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+        .logo {
+            font-size: 48px;
+            font-weight: bold;
+            margin-right: 20px;
+        }
+        .logo-image {
+            font-size: 24px;
+            margin-left: -15px;
+            margin-top: -30px;
+        }
+        .header-right {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .header-title {
+            font-size: 32px;
+            font-weight: bold;
+            text-align: right;
+            border-bottom: 1px dashed #666;
+            padding-bottom: 5px;
+        }
+        .header-fields {
+            display: flex;
+            gap: 20px;
+        }
+        .field-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .field-label {
+            font-weight: bold;
+        }
+        .field-input {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            min-width: 150px;
+        }
+        .section-header {
+            background-color: #222;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .meta-row {
+            display: flex;
+            background-color: #f9f9f9;
+        }
+        .meta-item {
+            flex: 1;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid #ddd;
+        }
+        .meta-label {
+            font-weight: bold;
+            min-width: 140px;
+        }
+        .meta-input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .table-header {
+            background-color: #666;
+            color: white;
+        }
+        .table-row:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .checkbox-cell {
+            text-align: center;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+        }
+        .checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #000;
+            display: inline-block;
+            position: relative;
+            cursor: pointer;
+        }
+        .checkbox.checked::after {
+            content: "✓";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .checkbox.crossed::after {
+            content: "✗";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: red;
+        }
+        .section-gray {
+            background-color: #666;
+            color: white;
+            padding: 10px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .info-section {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f1f1f1;
+            border-radius: 4px;
+        }
+        .info-section h3 {
+            margin-bottom: 10px;
+        }
+        .info-section ul {
+            padding-left: 20px;
+        }
+        .info-section li {
+            margin-bottom: 5px;
+        }
+        .hidden {
+            position: absolute;
+            left: -9999px;
+        }
+        @media print {
+            .controls, .info-section {
+                display: none;
+            }
+            .container {
+                box-shadow: none;
+                padding: 0;
+            }
+            body {
+                padding: 0;
+                background: white;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <div class="team" id="teamRed">
-            <button class="large-button" id="redButton">Equipo Rojo</button>
-            <div class="score" id="scoreRed">0</div>
+        <h1>Formulario Briefing Aldo's</h1>
+        
+        <div class="controls">
+            <button id="exportBtn" class="btn export">Exportar a PNG</button>
+            <button id="printBtn" class="btn">Imprimir</button>
+            <button id="saveBtn" class="btn save">Guardar Datos</button>
+            <button id="loadBtn" class="btn load">Cargar Datos</button>
+            <button id="resetBtn" class="btn reset">Reiniciar</button>
+            <input type="file" id="loadFile" class="hidden">
         </div>
-        <button class="start-button" id="startButton">¡Empezar!</button>
-        <div class="team" id="teamBlue">
-            <button class="large-button" id="blueButton">Equipo Azul</button>
-            <div class="score" id="scoreBlue">0</div>
+        
+        <div id="formContainer" class="form-container">
+            <div class="briefing-header">
+                <div class="header-left">
+                    <div class="logo">aldo's</div>
+                    <div class="logo-image">🍦</div>
+                </div>
+                <div class="header-right">
+                    <div class="header-title">BRIEFING</div>
+                    <div class="header-fields">
+                        <div class="field-group">
+                            <span class="field-label">TIENDA:</span>
+                            <input type="text" class="field-input" id="tienda">
+                        </div>
+                        <div class="field-group">
+                            <span class="field-label">FECHA:</span>
+                            <input type="text" class="field-input" id="fecha" placeholder="  /    /  ">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section-header">
+                <div class="field-group" style="justify-content: center; color: white;">
+                    <span class="field-label">TURNO:</span>
+                    <input type="text" class="field-input" id="tipoTurno" style="width: 80px; text-align: center;">
+                </div>
+            </div>
+            
+            <div class="meta-row">
+                <div class="meta-item">
+                    <span class="meta-label">Meta del turno</span>
+                    <span>$</span>
+                    <input type="text" class="meta-input" id="metaTurno">
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Ticket promedio</span>
+                    <span>$</span>
+                    <input type="text" class="meta-input" id="ticketPromedio">
+                </div>
+            </div>
+            
+            <table class="briefing-table">
+                <tr class="table-header">
+                    <th>NOMBRE</th>
+                    <th>ÁREA DE TRABAJO</th>
+                    <th>GORRA</th>
+                    <th>PIN</th>
+                    <th>MANDIL</th>
+                    <th>PLAYERA</th>
+                    <th>TENIS</th>
+                    <th>PANTALÓN</th>
+                    <th>GAFETE</th>
+                </tr>
+                <tr class="table-row" id="row-1">
+                    <td><input type="text" class="field-input" id="nombre1"></td>
+                    <td><input type="text" class="field-input" id="area1"></td>
+                    <td class="checkbox-cell" onclick="toggleCheckbox('gorra1')" ondblclick="crossCheckbox('gorra1')">
+                        <div class="checkbox" id="gorra1"></div>
+                    </td>
+                    <td class="checkbox-cell" onclick="toggleCheckbox('pin1')" ondblclick="crossCheckbox('pin1')">
+                        <div class="checkbox" id="pin1"></div>
+                    </td>
+                    <td class="checkbox-cell" onclick="toggleCheckbox('mandil1')" ondblclick="crossCheckbox('mandil1')">
+                        <div class="checkbox" id="mandil1"></div>
+                    </td>
+                    <td class="checkbox-cell" onclick="toggleCheckbox('playera1')" ondblclick="crossCheckbox('playera1')">
+                        <div class="checkbox" id="playera1"></div>
+                    </td>
+                    <td class="checkbox-cell" onclick="toggleCheckbox('tenis1')" ondblclick="crossCheckbox('tenis1')">
+                        <div class="checkbox" id="tenis1"></div>
+                    </td>
+                    <td class="checkbox-cell" onclick="toggleCheckbox('pantalon1')" ondblclick="crossCheckbox('pantalon1')">
+                        <div class="checkbox" id="pantalon1"></div>
+                    </td>
+                    <td class="checkbox-cell" onclick="toggleCheckbox('gafete1')" ondblclick="crossCheckbox('gafete1')">
+                        <div class="checkbox" id="gafete1"></div>
+                    </td>
+                </tr>
+                <tr class="table-row" id="row-2">
+                    <td><input type="text" class="field-input" id="nombre2"></td>
+                    <td><input type="text" class="field-input" id="area2"></td>
+                    <td class="checkbox-cell" onclick="toggleCheckbox('gorra2')" ondblclick="crossCheckbox('gorra2')">
+                        <div class="checkbox" id="gorra2"></div>
+                    </td>
+                    <td class="checkbox-cell" onclick="toggleCheckbox('pin2')" ondblclick="crossCheckbox('pin2')">
+                        <div class="checkbox" id="pin2"></div>
+                    </td>
+                    <td class="checkbox-cell" onclick="toggleCheckbox('mandil2')" ondblclick="crossCheckbox('mandil2')">
+                        <div class="checkbox" id="mandil2"></div>
+                    </td>
+                    <td class="checkbox-cell" onclick="toggleCheckbox('playera2')" ondblclick="crossCheckbox('playera2')">
+                        <div class="checkbox" id="playera2"></div>
+                    </td>
+                    <td class="checkbox-cell" onclick="toggleCheckbox('tenis2')" ondblclick="crossCheckbox('tenis2')">
+                        <div class="checkbox" id="tenis2"></div>
+                    </td>
+                    <td class="checkbox-cell" onclick="toggleCheckbox('pantalon2')" ondblclick="crossCheckbox('pantalon2')">
+                        <div class="checkbox" id="pantalon2"></div>
+                    </td>
+                    <td class="checkbox-cell" onclick="toggleCheckbox('gafete2')" ondblclick="crossCheckbox('gafete2')">
+                        <div class="checkbox" id="gafete2"></div>
+                    </td>
+                </tr>
+                <tr class="table-row" id="row-3">
+                    <td><input type="text" class="field-input" id="nombre3"></td>
+                    <td><input type="text" class="field-input" id="area3"></td>
+                    <td class="checkbox-cell" onclick="toggleCheckbox('gorra3')" ondblclick="crossCheckbox('gorra3')">
+                        <div class="checkbox" id="gorra3"></div>
+                    </td>
+                    <td class="checkbox-cell" onclick="toggleCheckbox('pin3')" ondblclick="crossCheckbox('pin3')">
+                        <div class="checkbox" id="pin3"></div>
+                    </td>
+                    <td class="checkbox-cell" onclick="toggleCheckbox('mandil3')" ondblclick="crossCheckbox('mandil3')">
+                        <div class="checkbox" id="mandil3"></div>
+                    </td>
+                    <td class="checkbox-cell" onclick="toggleCheckbox('playera3')" ondblclick="crossCheckbox('playera3')">
+                        <div class="checkbox" id="playera3"></div>
+                    </td>
+                    <td class="checkbox-cell" onclick="toggleCheckbox('tenis3')" ondblclick="crossCheckbox('tenis3')">
+                        <div class="checkbox" id="tenis3"></div>
+                    </td>
+                    <td class="checkbox-cell" onclick="toggleCheckbox('pantalon3')" ondblclick="crossCheckbox('pantalon3')">
+                        <div class="checkbox" id="pantalon3"></div>
+                    </td>
+                    <td class="checkbox-cell" onclick="toggleCheckbox('gafete3')" ondblclick="crossCheckbox('gafete3')">
+                        <div class="checkbox" id="gafete3"></div>
+                    </td>
+                </tr>
+                <tr class="table-row" id="row-4">
+                    <td><input type="text" class="field-input" id="nombre4"></td>
+                    <td><input type="text" class="field-input" id="area4"></td>
+                    <td class="checkbox-cell" onclick="toggleCheckbox('gorra4')" ondblclick="crossCheckbox('gorra4')">
+                        <div class="checkbox" id="gorra4"></div>
+                    </td>
+                    <td class="checkbox-cell" onclick="toggleCheckbox('pin4')" ondblclick="crossCheckbox('pin4')">
+                        <div class="checkbox" id="pin4"></div>
+                    </td>
+                    <td class="checkbox-cell" onclick="toggleCheckbox('mandil4')" ondblclick="crossCheckbox('mandil4')">
+                        <div class="checkbox" id="mandil4"></div>
+                    </td>
+                    <td class="checkbox-cell" onclick="toggleCheckbox('playera4')" ondblclick="crossCheckbox('playera4')">
+                        <div class="checkbox" id="playera4"></div>
+                    </td>
+                    <td class="checkbox-cell" onclick="toggleCheckbox('tenis4')" ondblclick="crossCheckbox('tenis4')">
+                        <div class="checkbox" id="tenis4"></div>
+                    </td>
+                    <td class="checkbox-cell" onclick="toggleCheckbox('pantalon4')" ondblclick="crossCheckbox('pantalon4')">
+                        <div class="checkbox" id="pantalon4"></div>
+                    </td>
+                    <td class="checkbox-cell" onclick="toggleCheckbox('gafete4')" ondblclick="crossCheckbox('gafete4')">
+                        <div class="checkbox" id="gafete4"></div>
+                    </td>
+                </tr>
+                <tr class="table-row" id="row-5">
+                    <td><input type="text" class="field-input" id="nombre5"></td>
+                    <td><input type="text" class="field-input" id="area5"></td>
+                    <td class="checkbox-cell" onclick="toggleCheckbox('gorra5')" ondblclick="crossCheckbox('gorra5')">
+                        <div class="checkbox" id="gorra5"></div>
+                    </td>
+                    <td class="checkbox-cell" onclick="toggleCheckbox('pin5')" ondblclick="crossCheckbox('pin5')">
+                        <div class="checkbox" id="pin5"></div>
+                    </td>
+                    <td class="checkbox-cell" onclick="toggleCheckbox('mandil5')" ondblclick="crossCheckbox('mandil5')">
+                        <div class="checkbox" id="mandil5"></div>
+                    </td>
+                    <td class="checkbox-cell" onclick="toggleCheckbox('playera5')" ondblclick="crossCheckbox('playera5')">
+                        <div class="checkbox" id="playera5"></div>
+                    </td>
+                    <td class="checkbox-cell" onclick="toggleCheckbox('tenis5')" ondblclick="crossCheckbox('tenis5')">
+                        <div class="checkbox" id="tenis5"></div>
+                    </td>
+                    <td class="checkbox-cell" onclick="toggleCheckbox('pantalon5')" ondblclick="crossCheckbox('pantalon5')">
+                        <div class="checkbox" id="pantalon5"></div>
+                    </td>
+                    <td class="checkbox-cell" onclick="toggleCheckbox('gafete5')" ondblclick="crossCheckbox('gafete5')">
+                        <div class="checkbox" id="gafete5"></div>
+                    </td>
+                </tr>
+            </table>
+            
+            <div class="section-gray">TEMAS DE OPERACIÓN</div>
+            <div style="border: 1px solid #ddd; padding: 10px; min-height: 100px;">
+                <textarea style="width: 100%; height: 100px; border: none; resize: none;" id="temas"></textarea>
+            </div>
+            
+            <table class="briefing-table">
+                <tr class="table-header">
+                    <th style="width: 50%;">PUSH DE VENTA</th>
+                    <th style="width: 50%;">86 EN TIENDA</th>
+                </tr>
+                <tr>
+                    <td style="height: 80px;">
+                        <textarea style="width: 100%; height: 100%; border: none; resize: none;" id="pushVenta"></textarea>
+                    </td>
+                    <td style="height: 80px;">
+                        <textarea style="width: 100%; height: 100%; border: none; resize: none;" id="enTienda"></textarea>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        
+        <div class="info-section">
+            <h3>Instrucciones de uso:</h3>
+            <ul>
+                <li>Especifique el turno (AM, PM, etc.) en el campo "TURNO".</li>
+                <li>Complete los datos de la tienda y fecha.</li>
+                <li>Haga clic en las casillas de verificación para marcarlas (✓).</li>
+                <li>Haga doble clic para marcar con X (✗).</li>
+                <li>Use los botones superiores para guardar, cargar o imprimir el formulario.</li>
+            </ul>
         </div>
     </div>
-    <audio id="soundRed" src="soundRed.mp3"></audio>
-    <audio id="soundBlue" src="soundBlue.mp3"></audio>
-    <audio id="bellSound" src="bellSound.mp3"></audio>
-    <script src="script.js"></script>
+
+    <script>
+        // Funciones para manejar las casillas de verificación
+        function toggleCheckbox(id) {
+            const checkbox = document.getElementById(id);
+            if (checkbox.classList.contains('crossed')) {
+                checkbox.classList.remove('crossed');
+                checkbox.classList.remove('checked');
+            } else if (checkbox.classList.contains('checked')) {
+                checkbox.classList.remove('checked');
+            } else {
+                checkbox.classList.add('checked');
+            }
+            saveToLocalStorage();
+        }
+        
+        function crossCheckbox(id) {
+            const checkbox = document.getElementById(id);
+            if (checkbox.classList.contains('crossed')) {
+                checkbox.classList.remove('crossed');
+            } else {
+                checkbox.classList.remove('checked');
+                checkbox.classList.add('crossed');
+            }
+            saveToLocalStorage();
+        }
+        
+        // Guardar datos en localStorage
+        function saveToLocalStorage() {
+            const formData = collectFormData();
+            localStorage.setItem('aldosBriefingData', JSON.stringify(formData));
+        }
+        
+        // Recopilar datos del formulario
+        function collectFormData() {
+            const formData = {
+                tienda: document.getElementById('tienda').value,
+                fecha: document.getElementById('fecha').value,
+                tipoTurno: document.getElementById('tipoTurno').value,
+                metaTurno: document.getElementById('metaTurno').value,
+                ticketPromedio: document.getElementById('ticketPromedio').value,
+                temas: document.getElementById('temas').value,
+                pushVenta: document.getElementById('pushVenta').value,
+                enTienda: document.getElementById('enTienda').value,
+                empleados: []
+            };
+            
+            // Recopilar datos de empleados (5 filas)
+            for (let i = 1; i <= 5; i++) {
+                const empleado = {
+                    nombre: document.getElementById(`nombre${i}`).value,
+                    area: document.getElementById(`area${i}`).value,
+                    gorra: getCheckboxState(`gorra${i}`),
+                    pin: getCheckboxState(`pin${i}`),
+                    mandil: getCheckboxState(`mandil${i}`),
+                    playera: getCheckboxState(`playera${i}`),
+                    tenis: getCheckboxState(`tenis${i}`),
+                    pantalon: getCheckboxState(`pantalon${i}`),
+                    gafete: getCheckboxState(`gafete${i}`)
+                };
+                formData.empleados.push(empleado);
+            }
+            
+            return formData;
+        }
+        
+        // Obtener estado de una casilla de verificación
+        function getCheckboxState(id) {
+            const checkbox = document.getElementById(id);
+            if (checkbox.classList.contains('checked')) {
+                return 'checked';
+            } else if (checkbox.classList.contains('crossed')) {
+                return 'crossed';
+            }
+            return '';
+        }
+        
+        // Cargar datos del localStorage
+        function loadFromLocalStorage() {
+            const savedData = localStorage.getItem('aldosBriefingData');
+            if (savedData) {
+                const formData = JSON.parse(savedData);
+                document.getElementById('tienda').value = formData.tienda || '';
+                document.getElementById('fecha').value = formData.fecha || '';
+                document.getElementById('tipoTurno').value = formData.tipoTurno || '';
+                document.getElementById('metaTurno').value = formData.metaTurno || '';
+                document.getElementById('ticketPromedio').value = formData.ticketPromedio || '';
+                document.getElementById('temas').value = formData.temas || '';
+                document.getElementById('pushVenta').value = formData.pushVenta || '';
+                document.getElementById('enTienda').value = formData.enTienda || '';
+                
+                // Cargar datos de empleados
+                if (formData.empleados && formData.empleados.length > 0) {
+                    formData.empleados.forEach((emp, index) => {
+                        const i = index + 1;
+                        if (i <= 5) {
+                            document.getElementById(`nombre${i}`).value = emp.nombre || '';
+                            document.getElementById(`area${i}`).value = emp.area || '';
+                            setCheckboxState(`gorra${i}`, emp.gorra);
+                            setCheckboxState(`pin${i}`, emp.pin);
+                            setCheckboxState(`mandil${i}`, emp.mandil);
+                            setCheckboxState(`playera${i}`, emp.playera);
+                            setCheckboxState(`tenis${i}`, emp.tenis);
+                            setCheckboxState(`pantalon${i}`, emp.pantalon);
+                            setCheckboxState(`gafete${i}`, emp.gafete);
+                        }
+                    });
+                }
+            }
+        }
+        
+        // Establecer estado de una casilla de verificación
+        function setCheckboxState(id, state) {
+            const checkbox = document.getElementById(id);
+            checkbox.classList.remove('checked', 'crossed');
+            if (state === 'checked') {
+                checkbox.classList.add('checked');
+            } else if (state === 'crossed') {
+                checkbox.classList.add('crossed');
+            }
+        }
+        
+        // Reiniciar formulario
+        function resetForm() {
+            if (confirm('¿Estás seguro de que deseas reiniciar el formulario? Se perderán todos los datos ingresados.')) {
+                document.getElementById('tienda').value = '';
+                document.getElementById('fecha').value = '';
+                document.getElementById('tipoTurno').value = '';
+                document.getElementById('metaTurno').value = '';
+                document.getElementById('ticketPromedio').value = '';
+                document.getElementById('temas').value = '';
+                document.getElementById('pushVenta').value = '';
+                document.getElementById('enTienda').value = '';
+                
+                // Reiniciar datos de empleados
+                for (let i = 1; i <= 5; i++) {
+                    document.getElementById(`nombre${i}`).value = '';
+                    document.getElementById(`area${i}`).value = '';
+                    setCheckboxState(`gorra${i}`, '');
+                    setCheckboxState(`pin${i}`, '');
+                    setCheckboxState(`mandil${i}`, '');
+                    setCheckboxState(`playera${i}`, '');
+                    setCheckboxState(`tenis${i}`, '');
+                    setCheckboxState(`pantalon${i}`, '');
+                    setCheckboxState(`gafete${i}`, '');
+                }
+                
+                localStorage.removeItem('aldosBriefingData');
+            }
+        }
+        
+        // Exportar a PNG
+        function exportToPng() {
+            // Se requiere la biblioteca html2canvas, que se puede cargar dinámicamente
+            if (!window.html2canvas) {
+                const script = document.createElement('script');
+                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+                script.onload = function () {
+                    exportWithHtml2Canvas();
+                };
+                document.head.appendChild(script);
+            } else {
+                exportWithHtml2Canvas();
+            }
+        }
+        
+        function exportWithHtml2Canvas() {
+            html2canvas(document.getElementById('formContainer')).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `Briefing_Aldos_${document.getElementById('tienda').value || 'Tienda'}_${document.getElementById('fecha').value || 'Fecha'}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
+        
+        // Guardar datos en un archivo
+        function saveToFile() {
+            const formData = collectFormData();
+            const blob = new Blob([JSON.stringify(formData)], { type: 'application/json' });
+            const link = document.createElement('a');
+            link.download = `Briefing_Aldos_${formData.tienda || 'Tienda'}_${formData.fecha || 'Fecha'}.json`;
+            link.href = URL.createObjectURL(blob);
+            link.click();
+        }
+        
+        // Cargar datos desde un archivo
+        function loadFromFile() {
+            document.getElementById('loadFile').click();
+        }
+        
+        // Manejar la carga del archivo
+        document.getElementById('loadFile').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const formData = JSON.parse(e.target.result);
+                        localStorage.setItem('aldosBriefingData', JSON.stringify(formData));
+                        loadFromLocalStorage();
+                    } catch (error) {
+                        alert('Error al cargar el archivo: ' + error.message);
+                    }
+                };
+                reader.readAsText(file);
+            }
+        });
+        
+        // Añadir listeners de eventos
+        document.getElementById('exportBtn').addEventListener('click', exportToPng);
+        document.getElementById('printBtn').addEventListener('click', () => window.print());
+        document.getElementById('saveBtn').addEventListener('click', saveToFile);
+        document.getElementById('loadBtn').addEventListener('click', loadFromFile);
+        document.getElementById('resetBtn').addEventListener('click', resetForm);
+        
+        // Listener para guardar automáticamente al cambiar inputs
+        document.querySelectorAll('input, textarea').forEach(el => {
+            el.addEventListener('change', saveToLocalStorage);
+            el.addEventListener('keyup', saveToLocalStorage);
+        });
+        
+        // Cargar datos guardados al cargar la página
+        document.addEventListener('DOMContentLoaded', loadFromLocalStorage);
+    </script>
 </body>
 </html>
