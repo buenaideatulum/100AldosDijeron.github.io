@@ -231,6 +231,37 @@
                 padding: 0;
                 background: white;
             }
+        @media screen and (max-width: 768px) {
+    .container {
+        padding: 20px;
+        border-radius: 10px;
+    }
+    
+    .controls {
+        flex-direction: column;
+    }
+    
+    .btn {
+        margin-bottom: 5px;
+        width: 100%;
+    }
+    
+    .header-fields {
+        flex-direction: column;
+    }
+    
+    .meta-row {
+        flex-direction: column;
+    }
+    
+    .briefing-table {
+        font-size: 14px;
+    }
+    
+    .field-input, .meta-input {
+        min-width: 100px;
+    }
+}
         }
     </style>
 </head>
@@ -626,13 +657,32 @@
         }
         
         function exportWithHtml2Canvas() {
-            html2canvas(document.getElementById('formContainer')).then(canvas => {
-                const link = document.createElement('a');
-                link.download = `Briefing_Aldos_${document.getElementById('tienda').value || 'Tienda'}_${document.getElementById('fecha').value || 'Fecha'}.png`;
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-            });
-        }
+    // Guardar el ancho original
+    const formContainer = document.getElementById('formContainer');
+    const originalWidth = formContainer.style.width;
+    
+    // Establecer un ancho fijo para captura consistente
+    formContainer.style.width = '1000px';
+    
+    // Configuración mejorada para dispositivos móviles
+    html2canvas(formContainer, {
+        scale: 1,
+        useCORS: true,
+        allowTaint: true,
+        scrollX: 0,
+        scrollY: 0,
+        windowWidth: document.documentElement.offsetWidth,
+        windowHeight: document.documentElement.offsetHeight
+    }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = `Briefing_Aldos_${document.getElementById('tienda').value || 'Tienda'}_${document.getElementById('fecha').value || 'Fecha'}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+        
+        // Restaurar el ancho original
+        formContainer.style.width = originalWidth;
+    });
+}
         
         // Guardar datos en un archivo
         function saveToFile() {
