@@ -54,18 +54,44 @@
         .info-section ul {padding-left: 20px;}
         .info-section li {margin-bottom: 5px;}
         
-        /* Estilos para la sección de imágenes */
+        /* Estilos modificados para la sección de imágenes */
         .image-section {margin-top: 20px;}
         .image-section-title {background-color: #666; color: white; padding: 8px; font-weight: bold; text-align: center;}
-        .image-grid {display: flex; flex-wrap: wrap; gap: 10px; padding: 15px; background-color: #f9f9f9; border: 1px solid #ddd;}
-        .image-container {position: relative; width: calc(50% - 5px); aspect-ratio: 4/3; border: 2px dashed #999; border-radius: 6px; overflow: hidden; cursor: pointer;}
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-gap: 10px;
+            padding: 15px; 
+            background-color: #f9f9f9; 
+            border: 1px solid #ddd;
+        }
+        .image-container {
+            position: relative; 
+            width: 100%;
+            aspect-ratio: 4/3; 
+            border: 2px dashed #999; 
+            border-radius: 6px; 
+            overflow: hidden; 
+            cursor: pointer; 
+            background-color: white;
+        }
         .image-container:hover {border-color: #555;}
         .image-placeholder {display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: #666; font-size: 14px;}
         .image-placeholder i {font-size: 36px; margin-bottom: 8px;}
-        .image-input {position: absolute; width: 100%; height: 100%; opacity: 0; cursor: pointer;}
-        .image-preview {width: 100%; height: 100%; object-fit: cover; display: none;}
-        .image-label {text-align: center; padding: 5px; background-color: rgba(0,0,0,0.5); color: white; position: absolute; bottom: 0; width: 100%; font-size: 12px;}
-        .delete-btn {position: absolute; top: 5px; right: 5px; background-color: rgba(255,0,0,0.7); color: white; border: none; width: 24px; height: 24px; border-radius: 50%; cursor: pointer; display: none; font-weight: bold;}
+        .image-input {position: absolute; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 10;}
+        .image-preview {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* Mantiene la proporción original */
+            display: none;
+            z-index: 5;
+            background-color: white;
+        }
+        .image-label {text-align: center; padding: 5px; background-color: rgba(0,0,0,0.5); color: white; position: absolute; bottom: 0; width: 100%; font-size: 12px; z-index: 6;}
+        .delete-btn {position: absolute; top: 5px; right: 5px; background-color: rgba(255,0,0,0.7); color: white; border: none; width: 24px; height: 24px; border-radius: 50%; cursor: pointer; display: none; font-weight: bold; z-index: 20;}
+        .loading-indicator {position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255,255,255,0.8); display: flex; justify-content: center; align-items: center; z-index: 8; display: none;}
+        .spinner {width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%; animation: spin 1s linear infinite;}
+        @keyframes spin {0% {transform: rotate(0deg);} 100% {transform: rotate(360deg);}}
         
         @media (max-width: 768px) {
             .container {padding: 10px;}
@@ -77,7 +103,7 @@
             .briefing-header {flex-direction: column; align-items: flex-start;}
             .header-fields {width: 100%;}
             .field-group {flex: 1; min-width: 120px;}
-            .image-container {width: 100%;}
+            .image-grid {grid-template-columns: 1fr;} /* Una columna en móviles */
         }
         
         @media print {
@@ -174,49 +200,61 @@
                 </tr>
             </table>
             
-            <!-- Nueva sección de imágenes -->
+            <!-- Sección de imágenes modificada a grid 2x2 -->
             <div class="image-section">
                 <div class="image-section-title">EVIDENCIAS FOTOGRÁFICAS</div>
                 <div class="image-grid">
                     <div class="image-container" id="imageContainer1">
-                        <div class="image-placeholder">
+                        <div class="image-placeholder" id="imagePlaceholder1">
                             <div style="font-size: 24px;">📷</div>
                             <div>Toca para subir imagen</div>
                         </div>
-                        <input type="file" class="image-input" id="imageInput1" accept="image/*">
+                        <input type="file" class="image-input" id="imageInput1" accept="image/*" capture="environment">
                         <img class="image-preview" id="imagePreview1">
                         <div class="image-label">Imagen 1</div>
                         <button class="delete-btn" id="deleteBtn1">×</button>
+                        <div class="loading-indicator" id="loadingIndicator1">
+                            <div class="spinner"></div>
+                        </div>
                     </div>
                     <div class="image-container" id="imageContainer2">
-                        <div class="image-placeholder">
+                        <div class="image-placeholder" id="imagePlaceholder2">
                             <div style="font-size: 24px;">📷</div>
                             <div>Toca para subir imagen</div>
                         </div>
-                        <input type="file" class="image-input" id="imageInput2" accept="image/*">
+                        <input type="file" class="image-input" id="imageInput2" accept="image/*" capture="environment">
                         <img class="image-preview" id="imagePreview2">
                         <div class="image-label">Imagen 2</div>
                         <button class="delete-btn" id="deleteBtn2">×</button>
+                        <div class="loading-indicator" id="loadingIndicator2">
+                            <div class="spinner"></div>
+                        </div>
                     </div>
                     <div class="image-container" id="imageContainer3">
-                        <div class="image-placeholder">
+                        <div class="image-placeholder" id="imagePlaceholder3">
                             <div style="font-size: 24px;">📷</div>
                             <div>Toca para subir imagen</div>
                         </div>
-                        <input type="file" class="image-input" id="imageInput3" accept="image/*">
+                        <input type="file" class="image-input" id="imageInput3" accept="image/*" capture="environment">
                         <img class="image-preview" id="imagePreview3">
                         <div class="image-label">Imagen 3</div>
                         <button class="delete-btn" id="deleteBtn3">×</button>
+                        <div class="loading-indicator" id="loadingIndicator3">
+                            <div class="spinner"></div>
+                        </div>
                     </div>
                     <div class="image-container" id="imageContainer4">
-                        <div class="image-placeholder">
+                        <div class="image-placeholder" id="imagePlaceholder4">
                             <div style="font-size: 24px;">📷</div>
                             <div>Toca para subir imagen</div>
                         </div>
-                        <input type="file" class="image-input" id="imageInput4" accept="image/*">
+                        <input type="file" class="image-input" id="imageInput4" accept="image/*" capture="environment">
                         <img class="image-preview" id="imagePreview4">
                         <div class="image-label">Imagen 4</div>
                         <button class="delete-btn" id="deleteBtn4">×</button>
+                        <div class="loading-indicator" id="loadingIndicator4">
+                            <div class="spinner"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -266,6 +304,13 @@
             
             // Configurar manejo de imágenes
             setupImageUploads();
+            
+            // Fijar la fecha actual como valor por defecto
+            const today = new Date();
+            const day = String(today.getDate()).padStart(2, '0');
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const year = today.getFullYear();
+            document.getElementById('fecha').value = `${day}/${month}/${year}`;
         });
         
         // Funciones para checkboxes
@@ -286,24 +331,59 @@
             if (checkbox.classList.contains('crossed')) checkbox.classList.remove('checked');
         };
         
-        // Funciones para manejo de imágenes
+        // Funciones mejoradas para manejo de imágenes
         const setupImageUploads = () => {
             // Configurar cada contenedor de imagen
             for (let i = 1; i <= 4; i++) {
                 const input = document.getElementById(`imageInput${i}`);
                 const preview = document.getElementById(`imagePreview${i}`);
                 const deleteBtn = document.getElementById(`deleteBtn${i}`);
+                const placeholder = document.getElementById(`imagePlaceholder${i}`);
+                const loadingIndicator = document.getElementById(`loadingIndicator${i}`);
                 
                 // Evento para cargar imagen
                 input.addEventListener('change', function(e) {
                     if (e.target.files && e.target.files[0]) {
+                        // Mostrar indicador de carga
+                        loadingIndicator.style.display = 'flex';
+                        placeholder.style.display = 'none';
+                        
                         const reader = new FileReader();
                         
                         reader.onload = function(event) {
-                            preview.src = event.target.result;
-                            preview.style.display = 'block';
-                            deleteBtn.style.display = 'block';
+                            // Crear una imagen temporal para verificar que cargue correctamente
+                            const tempImg = new Image();
+                            tempImg.onload = function() {
+                                // La imagen se cargó correctamente
+                                preview.src = event.target.result;
+                                preview.style.display = 'block';
+                                deleteBtn.style.display = 'block';
+                                loadingIndicator.style.display = 'none';
+                                placeholder.style.display = 'none';
+                                
+                                // Asignamos la imagen también como atributo de datos para asegurar su disponibilidad durante la exportación
+                                preview.setAttribute('data-src', event.target.result);
+                                console.log('Imagen cargada correctamente');
+                            };
+                            
+                            tempImg.onerror = function() {
+                                // Error al cargar la imagen
+                                alert('Error al cargar la imagen. Intente con otra imagen.');
+                                loadingIndicator.style.display = 'none';
+                                placeholder.style.display = 'flex';
+                                input.value = '';
+                                console.log('Error al cargar la imagen');
+                            };
+                            
+                            tempImg.src = event.target.result;
                         }
+                        
+                        reader.onerror = function() {
+                            alert('Error al leer el archivo. Intente nuevamente.');
+                            loadingIndicator.style.display = 'none';
+                            placeholder.style.display = 'flex';
+                            console.log('Error al leer el archivo');
+                        };
                         
                         reader.readAsDataURL(e.target.files[0]);
                     }
@@ -315,34 +395,128 @@
                     preview.src = '';
                     preview.style.display = 'none';
                     deleteBtn.style.display = 'none';
+                    placeholder.style.display = 'flex';
                     input.value = '';
+                    // Eliminar también el atributo de datos
+                    preview.removeAttribute('data-src');
                 });
                 
                 // Permitir que se haga clic en todo el contenedor
-                document.getElementById(`imageContainer${i}`).addEventListener('click', function() {
-                    input.click();
+                document.getElementById(`imageContainer${i}`).addEventListener('click', function(e) {
+                    // Evitar que se abra el selector de archivos cuando se hace clic en el botón de eliminar
+                    if (e.target !== deleteBtn && !deleteBtn.contains(e.target)) {
+                        input.click();
+                    }
+                });
+                
+                // Asegurar que la imagen se muestra correctamente
+                preview.addEventListener('load', function() {
+                    console.log(`Imagen ${i} mostrada correctamente`);
+                });
+                
+                preview.addEventListener('error', function() {
+                    console.log(`Error al mostrar la imagen ${i}`);
+                    preview.style.display = 'none';
+                    placeholder.style.display = 'flex';
+                    deleteBtn.style.display = 'none';
                 });
             }
         };
         
-        // Exportar a PNG
+        // Exportar a PNG - versión mejorada para calidad
         const exportToPng = () => {
-            const form = document.getElementById('formContainer');
-            html2canvas(form).then(canvas => {
-                const link = document.createElement('a');
-                link.download = `briefing-aldos-${new Date().toLocaleDateString().replace(/\//g, '-')}.png`;
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-            });
+            // Mostrar mensaje de espera
+            const exportBtn = document.getElementById('exportBtn');
+            const originalText = exportBtn.textContent;
+            exportBtn.textContent = 'Procesando...';
+            exportBtn.disabled = true;
+            
+            // Preparar imágenes para exportación
+            prepareImagesForExport(true);
+            
+            // Pequeño retraso para asegurar que todo esté renderizado correctamente
+            setTimeout(() => {
+                const form = document.getElementById('formContainer');
+                
+                // Opciones mejoradas para html2canvas con mejor calidad
+                const options = {
+                    scale: 3, // Mayor resolución para mejor calidad
+                    useCORS: true, // Permitir imágenes de origen cruzado
+                    allowTaint: true, // Permitir imágenes que pueden "manchar" el canvas
+                    backgroundColor: '#ffffff', // Asegurar fondo blanco
+                    logging: false, // Desactivar logs
+                    removeContainer: false, // No eliminar el contenedor temporal
+                    imageTimeout: 0, // Evitar timeout en carga de imágenes
+                };
+                
+                html2canvas(form, options).then(canvas => {
+                    // Guardar el PNG en alta calidad
+                    const link = document.createElement('a');
+                    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+                    link.download = `briefing-aldos-${timestamp}.png`;
+                    link.href = canvas.toDataURL('image/png', 1.0); // Calidad máxima
+                    link.click();
+                    
+                    // Restaurar botón
+                    exportBtn.textContent = originalText;
+                    exportBtn.disabled = false;
+                    
+                    // Restaurar visualización normal
+                    prepareImagesForExport(false);
+                }).catch(error => {
+                    console.error('Error al exportar:', error);
+                    alert('Hubo un error al exportar. Por favor intente nuevamente.');
+                    
+                    // Restaurar botón y visualización
+                    exportBtn.textContent = originalText;
+                    exportBtn.disabled = false;
+                    prepareImagesForExport(false);
+                });
+            }, 300); // Damos un poco más de tiempo para que se renderice todo
+        };
+        
+        // Preparar imágenes para exportación
+        const prepareImagesForExport = (forExport) => {
+            for (let i = 1; i <= 4; i++) {
+                const preview = document.getElementById(`imagePreview${i}`);
+                const placeholder = document.getElementById(`imagePlaceholder${i}`);
+                
+                if (forExport) {
+                    // Si hay una imagen cargada, asegurarse de que esté visible durante la exportación
+                    if (preview.getAttribute('data-src')) {
+                        // Asegurar que la imagen esté visible y cargada correctamente
+                        preview.style.display = 'block';
+                        placeholder.style.display = 'none';
+                        
+                        // Si por alguna razón src está vacío, usar el data-src
+                        if (!preview.src || preview.src === 'about:blank' || preview.src === '') {
+                            preview.src = preview.getAttribute('data-src');
+                        }
+                    }
+                } else {
+                    // Restaurar la visualización normal después de la exportación
+                    if (!preview.src || preview.src === 'about:blank' || preview.src === '') {
+                        preview.style.display = 'none';
+                        placeholder.style.display = 'flex';
+                    }
+                }
+            }
         };
         
         // Reiniciar formulario
         const resetForm = () => {
             if (confirm('¿Estás seguro de que deseas reiniciar el formulario?')) {
                 // Limpiar campos de texto
-                ['tienda', 'fecha', 'tipoTurno', 'metaTurno', 'ticketPromedio', 'temas', 'pushVenta', 'enTienda'].forEach(
+                ['tienda', 'tipoTurno', 'metaTurno', 'ticketPromedio', 'temas', 'pushVenta', 'enTienda'].forEach(
                     id => document.getElementById(id).value = ''
                 );
+                
+                // Fijar la fecha actual
+                const today = new Date();
+                const day = String(today.getDate()).padStart(2, '0');
+                const month = String(today.getMonth() + 1).padStart(2, '0');
+                const year = today.getFullYear();
+                document.getElementById('fecha').value = `${day}/${month}/${year}`;
                 
                 // Limpiar datos de empleados
                 for (let i = 1; i <= 5; i++) {
@@ -361,10 +535,13 @@
                     const preview = document.getElementById(`imagePreview${i}`);
                     const deleteBtn = document.getElementById(`deleteBtn${i}`);
                     const input = document.getElementById(`imageInput${i}`);
+                    const placeholder = document.getElementById(`imagePlaceholder${i}`);
                     
                     preview.src = '';
                     preview.style.display = 'none';
+                    preview.removeAttribute('data-src');
                     deleteBtn.style.display = 'none';
+                    placeholder.style.display = 'flex';
                     input.value = '';
                 }
             }
